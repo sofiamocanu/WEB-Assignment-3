@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>The Password Game</title>
+</head>
+<body>
+    <!-- 
+      ATTRIBUTION: 
+      HTML Structural Layout built by: [Teammate 4 Name]
+    -->
+    <h1>The Password Game</h1>
+    
+    <p>
+        <strong>How to play:</strong> Please choose a password. You must satisfy every rule that appears below. Changing things might break older rules! Progress saves automatically.
+    </p>
+
+    <h3 id="stats-banner">Personal Best: Unlocked 0 Rules</h3>
+
+    <label for="password-input">Please choose a password:</label>
+    <br><br>
+    
+    <input type="text" id="password-input" autocomplete="off" autofocus>
+    <span>Length: <strong id="char-count">0</strong> characters</span>
+    
+    <br><br>
+    <hr>
+    
+    <h2>Active Requirements:</h2>
+    <!-- Dynamic unstyled list rules will generate here -->
+    <div id="rules-container"></div>
+
+    <script src="app.js">
+        
+    </script>
+</body>
+</html>
