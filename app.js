@@ -34,9 +34,18 @@ function runRuleFive(pwd) {
 
 // Rule 6 - Your password must include a month of the year.
 // Responsible: Sofia
-
-
-
+function runRuleSix(pwd) {
+    const months = ["january", "february", "march", "april", "may", "june",
+        "july", "august", "september", "october", "november", "december"];
+    
+    let lowerPwd = pwd.toLowerCase();
+    for (let i = 0; i < months.length; i++) {
+        if (lowerPwd.includes(months[i])) {
+            return true;
+        }
+    }
+    return false;
+}
 
 // Rule 7 - Your password must include a roman numeral.
 // Responsible: Alisia
@@ -107,11 +116,60 @@ function runRuleNine(pwd) {
 
 // Rule 12 - A sacrifice must be made. Pick two letters that you will no longer be able to use.
 // Responsible: Sofia
+function runRuleTwelve() {
+  return sacrificedLetters.length === 2;
+}
+const pwdInput = document.getElementById("password-input");
+// Load any previously saved sacrificed letters from localStorage (if there are any)
+let sacrificedLetters = JSON.parse(localStorage.getItem("sacrificedLetters")) || [];
 
+//Intercepts typing to block future insertions once 2 letters are locked in
+pwdInput.addEventListener("beforeinput", (event) => {
+  if (!event.data) return;
 
+  const incomingText = event.data.toLowerCase();
+
+  //If the sacrifice has been chosen, blocks any incoming text containing those letters
+  if (sacrificedLetters.length === 2) {
+    const containsBanned = sacrificedLetters.some((letter) => incomingText.includes(letter));
+    if (containsBanned) {
+      event.preventDefault(); // Blocks new typing, leaves existing text intact
+    }
+  }
+});
+
+//Detects and locks in the 2 unique letters typed into the password box
+pwdInput.addEventListener("input", () => {
+  if (sacrificedLetters.length < 2) {
+    //Extract alphabetical characters from the password
+    const lettersOnly = pwdInput.value.toLowerCase().replace(/[^a-z]/g, "");
+    
+    // Grab the 2 unique letters the player types
+    let uniqueLetters = [];
+    for (const char of lettersOnly) {
+      if (!uniqueLetters.includes(char)) {
+        uniqueLetters.push(char); //Takes the letter in parentheses (char) and adds it to the end of uniqueLatters []
+      }
+      if (uniqueLetters.length === 2) break;
+    }
+
+    //Once the 2 letters are found in the password, locks them in as the sacrifice
+    if (uniqueLetters.length === 2) {
+      sacrificedLetters = uniqueLetters;
+      localStorage.setItem("sacrificedLetters", JSON.stringify(sacrificedLetters));
+    }
+  }
+});
 
 // Rule 13 - You do not have enough time this semester; sacrifice one course that you will fail and go for a retake.
 // Responsible: Sofia
+function runRuleThirteen(pwd) {
+  const courses = ["web1", "mse1", "pro1", "sep1"];
+  const lowerPassword = pwd.toLowerCase();
+  
+  //Returns true if the password includes at least one of these courses
+  return courses.some((course) => lowerPassword.includes(course));
+}
 
 
 
@@ -214,9 +272,12 @@ const rulesList = [
     { id: 3, description: "Your password must include an uppercase letter.", check: runRuleThree },
     { id: 4, description: "Your password must include a special character.", check: runRuleFour },
     { id: 5, description: "The digits in your password must add up to exactly 55.", check: runRuleFive },
+    { id: 6, description: "Your password must include a month of the year.", check: runRuleSix },
     { id: 7, description: "Your password must include a roman numeral.", check: runRuleSeven },
     { id: 8, description: "The Roman numerals in your password should multiply to 35.", check: runRuleEight },
     { id: 9, description: "Your password must include the HTML line of code needed for making or closing a new paragraph.", check: runRuleNine },
+    { id: 12, description: "A sacrifice must be made. Pick two letters that you will no longer be able to use.", check: runRuleTwelve },
+    { id: 13, description: "You do not have enough time this semester; sacrifice one course that you will fail and go for a retake.", check: runRuleThirteen },
     { id: 14, description: `Your password must include this color in hex: ${targetColor}`, check: runRuleColor },
     { id: 15, description: "Password must contain the capital of Denmark.", check: runRuleDenmarkCapital },
     { id: 16, description: "Every vowel must be uppercase.", check: runRuleVowelsUppercase },
