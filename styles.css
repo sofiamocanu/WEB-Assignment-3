@@ -49,3 +49,27 @@ body
   font-style: normal;
 }
 
+
+/* Styling for rule status boxes */
+.rule-card {
+    padding: 12px 16px;
+    margin-bottom: 10px;
+    border-radius: 6px;
+    border: 2px solid;
+    font-family: "Kanchenjunga", sans-serif;
+    font-weight: 500;
+}
+
+/* Valid rule state (Green) */
+.rule-card.valid {
+    color: #1E5700;
+    border-color: #1E5700;
+    background-color: #e8f5e9;
+}
+
+/* Invalid rule state (Red) */
+.rule-card.invalid {
+    color: #A80000;
+    border-color: #A80000;
+    background-color: #FBE0E0;
+}
