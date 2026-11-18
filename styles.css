@@ -67,7 +67,7 @@ body
     background-color: #e8f5e9;
 }
 
-/* Invalid rule state (Red) */
+/* Invalid rule (Red) */
 .rule-card.invalid {
     color: #A80000;
     border-color: #A80000;
