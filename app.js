@@ -313,23 +313,24 @@ function processPasswordGameLoop() {
         const rule = rulesList[i];
         const isPassed = rule.check(password);
 
-        // Build standard unstyled block components cleanly via native DOM API
+        // Build status box element
         const ruleParagraph = document.createElement("p");
-        
-        // Use clean text marks instead of CSS colors to display status
-        const statusLabel = isPassed ? "[VALID] " : "[INVALID] ";
-        ruleParagraph.innerText = `${statusLabel} Rule ${rule.id}: ${rule.description}`;
-
-        rulesContainer.appendChild(ruleParagraph);
+        ruleParagraph.classList.add("rule-card");
 
         if (isPassed) {
+            ruleParagraph.classList.add("valid");
+            ruleParagraph.innerText = `[VALID] Rule ${rule.id}: ${rule.description}`;
             currentScore++;
         } else {
-            stopPipeline = true; // Stop here so subsequent locked rules don't render
+            ruleParagraph.classList.add("invalid");
+            ruleParagraph.innerText = `[INVALID] Rule ${rule.id}: ${rule.description}`;
+            stopPipeline = true; // Stop pipeline on first failed rule
         }
+
+        rulesContainer.appendChild(ruleParagraph);
     }
 
-    // Save peak milestone records down into browser's local cache
+    // Save peak milestone records
     if (currentScore > personalBest) {
         personalBest = currentScore;
         localStorage.setItem("via_unstyled_score", personalBest);
