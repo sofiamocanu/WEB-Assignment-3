@@ -235,12 +235,12 @@ function runRuleTwentyOne(pwd) {
 
 
 
-// Rule 22 - Your password should include Allan's favourite exercise all lowercase letters (Hint: Session 14)
+// Rule 22 - Your password should include Allan's favourite exercise, all lowercase letters except vowels (Hint: Session 14)
 // Responsible: Ionela
 
 function runRuleTwentyTwo(pwd) {
     var lowerPwd = pwd.toLowerCase();
-    return lowerPwd.indexOf("mydate") !== -1;
+    return lowerPwd.indexOf("mydAtE") !== -1;
 }
 
 // Rule 23 - Password must contain a palindrome (at least 3 characters long)
