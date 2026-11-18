@@ -116,7 +116,7 @@ function runRuleNine(pwd) {
 
 // Rule 12 - A sacrifice must be made. Pick two letters that you will no longer be able to use.
 // Responsible: Sofia
-function runRuleTwelve() {
+/*function runRuleTwelve() {
   return sacrificedLetters.length === 2;
 }
 const pwdInput = document.getElementById("password-input");
@@ -159,7 +159,7 @@ pwdInput.addEventListener("input", () => {
       localStorage.setItem("sacrificedLetters", JSON.stringify(sacrificedLetters));
     }
   }
-});
+});*/
 
 // Rule 13 - You do not have enough time this semester; sacrifice one course that you will fail and go for a retake.
 // Responsible: Sofia
