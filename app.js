@@ -116,50 +116,76 @@ function runRuleNine(pwd) {
 
 // Rule 12 - A sacrifice must be made. Pick two letters that you will no longer be able to use.
 // Responsible: Sofia
-/*function runRuleTwelve() {
-  return sacrificedLetters.length === 2;
-}
-const pwdInput = document.getElementById("password-input");
-// Load any previously saved sacrificed letters from localStorage (if there are any)
+// Load any previously saved sacrificed letters from localStorage
 let sacrificedLetters = JSON.parse(localStorage.getItem("sacrificedLetters")) || [];
 
-//Intercepts typing to block future insertions once 2 letters are locked in
+// Rule check function for the game engine
+function runRuleTwelve() {
+  return sacrificedLetters.length === 2;
+}
+
+const pwdInput = document.getElementById("password-input");
+
+// Intercept typing in the MAIN password box to block banned letters
 pwdInput.addEventListener("beforeinput", (event) => {
   if (!event.data) return;
-
   const incomingText = event.data.toLowerCase();
 
-  //If the sacrifice has been chosen, blocks any incoming text containing those letters
   if (sacrificedLetters.length === 2) {
     const containsBanned = sacrificedLetters.some((letter) => incomingText.includes(letter));
     if (containsBanned) {
-      event.preventDefault(); // Blocks new typing, leaves existing text intact
+      event.preventDefault(); // Blocks typing of sacrificed letters
     }
   }
 });
 
-//Detects and locks in the 2 unique letters typed into the password box
-pwdInput.addEventListener("input", () => {
-  if (sacrificedLetters.length < 2) {
-    //Extract alphabetical characters from the password
-    const lettersOnly = pwdInput.value.toLowerCase().replace(/[^a-z]/g, "");
-    
-    // Grab the 2 unique letters the player types
-    let uniqueLetters = [];
-    for (const char of lettersOnly) {
-      if (!uniqueLetters.includes(char)) {
-        uniqueLetters.push(char); //Takes the letter in parentheses (char) and adds it to the end of uniqueLatters []
-      }
-      if (uniqueLetters.length === 2) break;
+// Function to handle setting or changing the sacrificed letters from the UI field
+function handleSacrificeSubmission(inputVal) {
+  const cleanLetters = inputVal.toLowerCase().replace(/[^a-z]/g, "");
+  
+  let uniqueLetters = [];
+  for (const char of cleanLetters) {
+    if (!uniqueLetters.includes(char)) {
+      uniqueLetters.push(char);
     }
-
-    //Once the 2 letters are found in the password, locks them in as the sacrifice
-    if (uniqueLetters.length === 2) {
-      sacrificedLetters = uniqueLetters;
-      localStorage.setItem("sacrificedLetters", JSON.stringify(sacrificedLetters));
-    }
+    if (uniqueLetters.length === 2) break;
   }
-});*/
+
+  if (uniqueLetters.length === 2) {
+    sacrificedLetters = uniqueLetters;
+    localStorage.setItem("sacrificedLetters", JSON.stringify(sacrificedLetters));
+    alert(`Sacrifice locked: ${sacrificedLetters[0].toUpperCase()} and ${sacrificedLetters[1].toUpperCase()} are now banned from your password!`);
+  } else {
+    alert("Please enter at least 2 unique alphabetical letters.");
+  }
+}
+
+// Function to clear/change the sacrifice
+function resetSacrifice() {
+  localStorage.removeItem("sacrificedLetters");
+  sacrificedLetters = [];
+  alert("Sacrifice cleared! You can now choose new letters.");
+}
+
+// UI generator function using template literals
+function getRuleTwelveUIHTML() {
+  if (sacrificedLetters.length === 2) {
+    return `
+      <div>
+        <span>Sacrificed: <strong>${sacrificedLetters[0].toUpperCase()}</strong> and <strong>${sacrificedLetters[1].toUpperCase()}</strong> (Permanently Banned)</span>
+        <button onclick="resetSacrifice()">Change Sacrifice</button>
+      </div>
+    `;
+  } else {
+    return `
+      <div>
+        <p>A sacrifice must be made. Type 2 letters to ban:</p>
+        <input type="text" id="sacrifice-input" maxlength="2" placeholder="e.g. m, o">
+        <button onclick="handleSacrificeSubmission(document.getElementById('sacrifice-input').value)">Lock In Sacrifice</button>
+      </div>
+    `;
+  }
+}
 
 // Rule 13 - You do not have enough time this semester; sacrifice one course that you will fail and go for a retake.
 // Responsible: Sofia
@@ -276,7 +302,7 @@ const rulesList = [
     { id: 7, description: "Your password must include a roman numeral.", check: runRuleSeven },
     { id: 8, description: "The Roman numerals in your password should multiply to 35.", check: runRuleEight },
     { id: 9, description: "Your password must include the HTML line of code needed for making or closing a new paragraph.", check: runRuleNine },
-    //{ id: 12, description: "A sacrifice must be made. Pick two letters that you will no longer be able to use.", check: runRuleTwelve },
+    { id: 12, description: getRuleTwelveUIHTML(), check: runRuleTwelve },
     { id: 13, description: "You do not have enough time this semester; sacrifice one course that you will fail and go for a retake.", check: runRuleThirteen },
     { id: 14, description: `Your password must include this color in hex: ${targetColor}`, check: runRuleColor },
     { id: 15, description: "Password must contain the capital of Denmark.", check: runRuleDenmarkCapital },
@@ -319,11 +345,11 @@ function processPasswordGameLoop() {
 
         if (isPassed) {
             ruleParagraph.classList.add("valid");
-            ruleParagraph.innerText = `[VALID] Rule ${rule.id}: ${rule.description}`;
+            ruleParagraph.innerHTML = `[VALID] Rule ${rule.id}: ${rule.description}`;
             currentScore++;
         } else {
             ruleParagraph.classList.add("invalid");
-            ruleParagraph.innerText = `[INVALID] Rule ${rule.id}: ${rule.description}`;
+            ruleParagraph.innerHTML = `[INVALID] Rule ${rule.id}: ${rule.description}`;
             stopPipeline = true; // Stop pipeline on first failed rule
         }
 
