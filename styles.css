@@ -22,6 +22,14 @@ body
     background-color: #f7f3eb;
     font-family: "Kanchenjunga", normal;
     font-weight: 400;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 100vh;
+    margin: 0;
+    padding: 30px 20px;
+    box-sizing: border-box;
 }
 
 
