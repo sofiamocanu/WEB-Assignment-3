@@ -225,7 +225,7 @@ function runRuleTwenty(pwd) {
 // Rule 21 - Checking if the length is a prime number
 // Responsible: Jade
 function runRuleTwentyOne(pwd) {
-    const len = String(pwd.length);
+    const len = pwd.length;
     if (len < 2) return false;
     for (let i = 2; i <= Math.sqrt(len); i++) {
         if (len % i === 0) return false;
