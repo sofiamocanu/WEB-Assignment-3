@@ -331,11 +331,10 @@ function processPasswordGameLoop() {
     rulesContainer.innerHTML = ""; // Clear existing rule lists
 
     let currentScore = 0;
-    let stopPipeline = false;
+    let validRulesHTML = [];
+    let invalidRulesHTML = [];
 
     for (let i = 0; i < rulesList.length; i++) {
-        if (stopPipeline) break;
-
         const rule = rulesList[i];
         const isPassed = rule.check(password);
 
@@ -347,13 +346,23 @@ function processPasswordGameLoop() {
             ruleParagraph.classList.add("valid");
             ruleParagraph.innerHTML = `[VALID] Rule ${rule.id}: ${rule.description}`;
             currentScore++;
+            validRulesHTML.push(ruleParagraph);
         } else {
             ruleParagraph.classList.add("invalid");
             ruleParagraph.innerHTML = `[INVALID] Rule ${rule.id}: ${rule.description}`;
-            stopPipeline = true; // Stop pipeline on first failed rule
+            invalidRulesHTML.push(ruleParagraph);
+            break; // Stop pipeline on first failed rule
         }
+    }
+    
+    // Append INVALID rules FIRST so they appear at the top
+    for (const ruleCard of invalidRulesHTML) {
+        rulesContainer.appendChild(ruleCard);
+    }
 
-        rulesContainer.appendChild(ruleParagraph);
+    // Append VALID rules below them
+    for (const ruleCard of validRulesHTML) {
+        rulesContainer.appendChild(ruleCard);
     }
 
     // Save peak milestone records
