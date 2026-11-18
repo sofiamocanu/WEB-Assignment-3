@@ -276,7 +276,7 @@ const rulesList = [
     { id: 7, description: "Your password must include a roman numeral.", check: runRuleSeven },
     { id: 8, description: "The Roman numerals in your password should multiply to 35.", check: runRuleEight },
     { id: 9, description: "Your password must include the HTML line of code needed for making or closing a new paragraph.", check: runRuleNine },
-    { id: 12, description: "A sacrifice must be made. Pick two letters that you will no longer be able to use.", check: runRuleTwelve },
+    //{ id: 12, description: "A sacrifice must be made. Pick two letters that you will no longer be able to use.", check: runRuleTwelve },
     { id: 13, description: "You do not have enough time this semester; sacrifice one course that you will fail and go for a retake.", check: runRuleThirteen },
     { id: 14, description: `Your password must include this color in hex: ${targetColor}`, check: runRuleColor },
     { id: 15, description: "Password must contain the capital of Denmark.", check: runRuleDenmarkCapital },
