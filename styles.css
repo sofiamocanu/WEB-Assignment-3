@@ -73,3 +73,28 @@ body
     border-color: #A80000;
     background-color: #FBE0E0;
 }
+
+#password-input, 
+#char-count, 
+#stats-banner, 
+#rules-container {
+    width: 100%;
+    max-width: 650px;
+}
+
+/* Makes sure the rules container stacks nicely */
+#rules-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+#password-input {
+    padding: 10px 14px;
+    font-size: 16px;
+    border-radius: 6px;
+    border: 2px solid #25165F;
+    box-sizing: border-box;
+    background-color: #ffffff;
+}
