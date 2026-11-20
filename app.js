@@ -106,11 +106,17 @@ function runRuleNine(pwd) {
 
 // Rule 10 - 🐈 This is Line’s cat Sofus. Please put him in your password and keep him safe.
 // Responsible: Anna
+function runRuleTen(pwd){
+    return /sofus/i.test(pwd);
+}
 
 
 
 // Rule 11 - Sofus is hungry! Please don’t forget to feed him one 🐁and one🐟.
 // Responsible: Anna
+function runRuleEleven(pwd){
+    return pwd.includes("🐁") && pwd.includes("🐟");
+}
 
 
 
@@ -291,6 +297,14 @@ function runRuleTwentyThree(pwd) {
     return false;
 }
 
+//Rule 24 - Your password must contain the third password you entered.
+//Responsible: Anna
+function runRuleTwentyFour(pwd){
+    if (thirdPassword === null) return false;
+    return pwd.toLowerCase().includes(thirdPassword.toLowerCase());
+}
+    
+
 // Centralised Array mapping our 25 rules
 const rulesList = [
     { id: 1, description: "Your password must be at least 5 characters long.", check: runRuleOne },
@@ -302,6 +316,8 @@ const rulesList = [
     { id: 7, description: "Your password must include a roman numeral.", check: runRuleSeven },
     { id: 8, description: "The Roman numerals in your password should multiply to 35.", check: runRuleEight },
     { id: 9, description: "Your password must include the HTML line of code needed for making or closing a new paragraph.", check: runRuleNine },
+    { id: 10, description: "🐈 This is Line’s cat Sofus. Please put him in your password and keep him safe.", check: runRuleTen },
+    { id: 11, description: "Sofus is hungry! Please don’t forget to feed him one 🐁and one🐟.", check: runRuleEleven },
     { id: 12, description: getRuleTwelveUIHTML(), check: runRuleTwelve },
     { id: 13, description: "You do not have enough time this semester; sacrifice one course that you will fail and go for a retake.", check: runRuleThirteen },
     { id: 14, description: `Your password must include this color in hex: ${targetColor}`, check: runRuleColor },
@@ -313,7 +329,8 @@ const rulesList = [
     { id: 20, description: "Your password must include the total password length.", check: runRuleTwenty },
     { id: 21, description: "Your password length must be a prime number.", check: runRuleTwentyOne },
     { id: 22, description: "Your password should include Allan's favourite exercise, all lowercase letters.", check: runRuleTwentyTwo },
-    { id: 23, description: "Your password must contain a palindrome (at least 3 characters).", check: runRuleTwentyThree }
+    { id: 23, description: "Your password must contain a palindrome (at least 3 characters).", check: runRuleTwentyThree },
+     { id: 24, description: "Your password must contain the third password you entered.", check: runRuleTwentyFour }
 ];
 
 const passwordInput = document.getElementById("password-input");
@@ -365,6 +382,11 @@ function processPasswordGameLoop() {
         rulesContainer.appendChild(ruleCard);
     }
 
+    //Remember the password the first time rule 3 is passed (reule 24)
+    if (currentScore >=3 && thirdPassword === null){
+        thirdPassword = password;
+    }
+    
     // Save peak milestone records
     if (currentScore > personalBest) {
         personalBest = currentScore;
