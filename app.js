@@ -119,8 +119,7 @@ function runRuleEleven(pwd) {
     return pwd.includes("🐁") && pwd.includes("🐟");
 }
 
-// Rule 12 - A sacrifice must be made. Pick two letters that you will no longer be able to use.
-// Responsible: Sofia
+
 // Rule 12 - A sacrifice must be made. Pick two letters that you will no longer be able to use.
 // Responsible: Sofia
 let sacrificedLetters = JSON.parse(localStorage.getItem("sacrificedLetters")) || [];
@@ -430,5 +429,6 @@ resetGameBtn.addEventListener("click", resetGame);
 
 // Initialize application interface loop
 processPasswordGameLoop();
+
 
 
