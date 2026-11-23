@@ -1,4 +1,4 @@
-/* Responsible: Alisia 
+/* Responsible: Alisia
 COLORS + FONTS
 
 valid-green: #1E5700
@@ -17,8 +17,7 @@ font-weight: 400;
     background-color: #f7f3eb;
 }
 
-body
-{
+body {
     background-color: #f7f3eb;
     font-family: "Kanchenjunga", normal;
     font-weight: 400;
@@ -40,33 +39,35 @@ body
 }
 
 .kanchenjunga-regular {
-  font-family: "Kanchenjunga", sans-serif;
-  font-weight: 400;
-  font-style: normal;
+    font-family: "Kanchenjunga", sans-serif;
+    font-weight: 400;
+    font-style: normal;
 }
 
 .kanchenjunga-medium {
-  font-family: "Kanchenjunga", sans-serif;
-  font-weight: 500;
-  font-style: normal;
+    font-family: "Kanchenjunga", sans-serif;
+    font-weight: 500;
+    font-style: normal;
 }
 
 .kanchenjunga-semibold {
-  font-family: "Kanchenjunga", sans-serif;
-  font-weight: 600;
-  font-style: normal;
+    font-family: "Kanchenjunga", sans-serif;
+    font-weight: 600;
+    font-style: normal;
 }
 
 .kanchenjunga-bold {
-  font-family: "Kanchenjunga", sans-serif;
-  font-weight: 700;
-  font-style: normal;
+    font-family: "Kanchenjunga", sans-serif;
+    font-weight: 700;
+    font-style: normal;
 }
+
 
 /* Responsible: Ionela */
 .hidden {
     display: none;
 }
+
 
 /* Rules counter */
 #rules-counter {
@@ -75,7 +76,6 @@ body
     font-weight: 600;
     color: #25165F;
 }
-
 
 /* Victory banner */
 .victory-banner {
@@ -130,9 +130,9 @@ body
     background-color: #FBE0E0;
 }
 
-#password-input, 
-#char-count, 
-#stats-banner, 
+#password-input,
+#char-count,
+#stats-banner,
 #rules-container {
     width: 100%;
     max-width: 650px;
