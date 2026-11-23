@@ -9,34 +9,38 @@
     <link href="https://fonts.googleapis.com/css2?family=Kanchenjunga:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    
-    <div class="game-wrapper"><!-- 
-      Responsible: ...
-    -->
+    <!-- Responsible: Team (Alisia, Anna, Jade, Sofia, Ionela) -->
+    <div class="game-wrapper">
         <h1>The Password Game</h1>
-    
+
         <p>
             <strong>How to play:</strong> Please choose a password. You must satisfy every rule that appears below. Changing things might break older rules! Progress saves automatically.
         </p>
 
         <h3 id="stats-banner">Personal Best: Unlocked 0 Rules</h3>
 
+        <p id="rules-counter">Rules Met: <strong id="rules-met-count">0</strong> / <span id="total-rules-count">24</span></p>
+
+        <div id="victory-banner" class="victory-banner hidden" role="status" aria-live="polite">
+            <strong>Victory!</strong> You satisfied every active rule!
+        </div>
+
+        <button type="button" id="reset-game-btn">Reset / New Game</button>
+
         <label for="password-input">Please choose a password:</label>
         <br><br>
-    
+
         <input type="text" id="password-input" autocomplete="off" autofocus>
         <span>Length: <strong id="char-count">0</strong> characters</span>
-    
+
         <br><br>
         <hr>
-    
-        <h2>Active Requirements:</h2>
-    <!-- Dynamic unstyled list rules will generate here -->
-        <div id="rules-container"></div>
-    </div>    
 
-    <script src="app.js">
-        
-    </script>
+        <h2>Active Requirements:</h2>
+        <!-- Dynamic rule cards will generate here -->
+        <div id="rules-container"></div>
+    </div>
+
+    <script src="app.js"></script>
 </body>
 </html>
