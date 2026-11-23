@@ -1,5 +1,7 @@
+// Responsible: Anna
+let thirdPassword = null;
 
-//Rule 1 - Length verification condition check
+// Rule 1 - Length verification condition check
 // Responsible: Jade
 function runRuleOne(pwd) {
     return pwd.length >= 5;
@@ -7,7 +9,6 @@ function runRuleOne(pwd) {
 
 // Rule 2 - Checking if a numeric digit exists
 // Responsible: Anna
-
 function runRuleTwo(pwd) {
     return /\d/.test(pwd);
 }
@@ -35,10 +36,12 @@ function runRuleFive(pwd) {
 // Rule 6 - Your password must include a month of the year.
 // Responsible: Sofia
 function runRuleSix(pwd) {
-    const months = ["january", "february", "march", "april", "may", "june",
-        "july", "august", "september", "october", "november", "december"];
-    
-    let lowerPwd = pwd.toLowerCase();
+    const months = [
+        "january", "february", "march", "april", "may", "june",
+        "july", "august", "september", "october", "november", "december"
+    ];
+
+    const lowerPwd = pwd.toLowerCase();
     for (let i = 0; i < months.length; i++) {
         if (lowerPwd.includes(months[i])) {
             return true;
@@ -49,46 +52,46 @@ function runRuleSix(pwd) {
 
 // Rule 7 - Your password must include a roman numeral.
 // Responsible: Alisia
-function runRuleSeven(pwd){
-   return /[IVXLCDM]/.test(pwd);
+function runRuleSeven(pwd) {
+    return /[IVXLCDM]/.test(pwd);
 }
 
 // Helper function for rule 8 to convert a Roman Numeral character to its numeric value
 // Responsible: Ionela
 function getRomanValueForRuleEight(char) {
-    if (char === 'I') return 1;
-    if (char === 'V') return 5;
-    if (char === 'X') return 10;
-    if (char === 'L') return 50;
-    if (char === 'C') return 100;
-    if (char === 'D') return 500;
-    if (char === 'M') return 1000;
+    if (char === "I") return 1;
+    if (char === "V") return 5;
+    if (char === "X") return 10;
+    if (char === "L") return 50;
+    if (char === "C") return 100;
+    if (char === "D") return 500;
+    if (char === "M") return 1000;
     return 0;
 }
 
 // Rule 8 - The Roman numerals in your password should multiply to 35
 // Responsible: Ionela
 function runRuleEight(pwd) {
-    var matches = pwd.match(/[IVXLCDM]+/g);
+    const matches = pwd.match(/[IVXLCDM]+/g);
     if (!matches) return false;
 
-    var totalProduct = 1;
-    var foundAny = false;
+    let totalProduct = 1;
+    let foundAny = false;
 
-    for (var i = 0; i < matches.length; i++) {
-        var romanStr = matches[i];
-        var numericVal = 0;
-        
-        for (var j = 0; j < romanStr.length; j++) {
-            var current = getRomanValueForRuleEight(romanStr[j]);
-            var next = getRomanValueForRuleEight(romanStr[j + 1]);
+    for (let i = 0; i < matches.length; i++) {
+        const romanStr = matches[i];
+        let numericVal = 0;
+
+        for (let j = 0; j < romanStr.length; j++) {
+            const current = getRomanValueForRuleEight(romanStr[j]);
+            const next = getRomanValueForRuleEight(romanStr[j + 1]);
             if (next && current < next) {
                 numericVal -= current;
             } else {
                 numericVal += current;
             }
         }
-        
+
         if (numericVal > 0) {
             totalProduct *= numericVal;
             foundAny = true;
@@ -98,155 +101,150 @@ function runRuleEight(pwd) {
     return foundAny && (totalProduct === 35);
 }
 
-// Rule 9 - Your password must include the HTML line of code needed for making or closing a new paragraph 
+// Rule 9 - Your password must include the HTML line of code needed for making or closing a new paragraph
 // Responsible: Ionela
 function runRuleNine(pwd) {
-    var hasP = pwd.indexOf("<p>") !== -1 || pwd.indexOf("</p>") !== -1;
-    return hasP;
+    return pwd.indexOf("<p>") !== -1 || pwd.indexOf("</p>") !== -1;
 }
 
-// Rule 10 - 🐈 This is Line’s cat Sofus. Please put him in your password and keep him safe.
+// Rule 10 - This is Line's cat Sofus. Please put him in your password and keep him safe.
 // Responsible: Anna
-function runRuleTen(pwd){
+function runRuleTen(pwd) {
     return /sofus/i.test(pwd);
 }
 
-
-
-// Rule 11 - Sofus is hungry! Please don’t forget to feed him one 🐁and one🐟.
+// Rule 11 - Sofus is hungry! Please don't forget to feed him one mouse and one fish.
 // Responsible: Anna
-function runRuleEleven(pwd){
+function runRuleEleven(pwd) {
     return pwd.includes("🐁") && pwd.includes("🐟");
 }
 
-
-
 // Rule 12 - A sacrifice must be made. Pick two letters that you will no longer be able to use.
 // Responsible: Sofia
-// Load any previously saved sacrificed letters from localStorage
 let sacrificedLetters = JSON.parse(localStorage.getItem("sacrificedLetters")) || [];
 
-// Rule check function for the game engine
 function runRuleTwelve() {
-  return sacrificedLetters.length === 2;
+    return sacrificedLetters.length === 2;
 }
 
 const pwdInput = document.getElementById("password-input");
 
 // Intercept typing in the MAIN password box to block banned letters
 pwdInput.addEventListener("beforeinput", (event) => {
-  if (!event.data) return;
-  const incomingText = event.data.toLowerCase();
+    if (!event.data) return;
+    const incomingText = event.data.toLowerCase();
 
-  if (sacrificedLetters.length === 2) {
-    const containsBanned = sacrificedLetters.some((letter) => incomingText.includes(letter));
-    if (containsBanned) {
-      event.preventDefault(); // Blocks typing of sacrificed letters
+    if (sacrificedLetters.length === 2) {
+        const containsBanned = sacrificedLetters.some((letter) => incomingText.includes(letter));
+        if (containsBanned) {
+            event.preventDefault();
+        }
     }
-  }
 });
+
+function refreshRuleTwelveDescription() {
+    const ruleTwelve = rulesList.find((rule) => rule.id === 12);
+    if (ruleTwelve) {
+        ruleTwelve.description = getRuleTwelveUIHTML();
+    }
+}
 
 // Function to handle setting or changing the sacrificed letters from the UI field
 function handleSacrificeSubmission(inputVal) {
-  const cleanLetters = inputVal.toLowerCase().replace(/[^a-z]/g, "");
-  
-  let uniqueLetters = [];
-  for (const char of cleanLetters) {
-    if (!uniqueLetters.includes(char)) {
-      uniqueLetters.push(char);
-    }
-    if (uniqueLetters.length === 2) break;
-  }
+    const cleanLetters = inputVal.toLowerCase().replace(/[^a-z]/g, "");
 
-  if (uniqueLetters.length === 2) {
-    sacrificedLetters = uniqueLetters;
-    localStorage.setItem("sacrificedLetters", JSON.stringify(sacrificedLetters));
-    alert(`Sacrifice locked: ${sacrificedLetters[0].toUpperCase()} and ${sacrificedLetters[1].toUpperCase()} are now banned from your password!`);
-  } else {
-    alert("Please enter at least 2 unique alphabetical letters.");
-  }
+    const uniqueLetters = [];
+    for (const char of cleanLetters) {
+        if (!uniqueLetters.includes(char)) {
+            uniqueLetters.push(char);
+        }
+        if (uniqueLetters.length === 2) break;
+    }
+
+    if (uniqueLetters.length === 2) {
+        sacrificedLetters = uniqueLetters;
+        localStorage.setItem("sacrificedLetters", JSON.stringify(sacrificedLetters));
+        refreshRuleTwelveDescription();
+        processPasswordGameLoop();
+        alert(`Sacrifice locked: ${sacrificedLetters[0].toUpperCase()} and ${sacrificedLetters[1].toUpperCase()} are now banned from your password!`);
+    } else {
+        alert("Please enter at least 2 unique alphabetical letters.");
+    }
 }
 
 // Function to clear/change the sacrifice
 function resetSacrifice() {
-  localStorage.removeItem("sacrificedLetters");
-  sacrificedLetters = [];
-  alert("Sacrifice cleared! You can now choose new letters.");
+    localStorage.removeItem("sacrificedLetters");
+    sacrificedLetters = [];
+    refreshRuleTwelveDescription();
+    processPasswordGameLoop();
+    alert("Sacrifice cleared! You can now choose new letters.");
 }
 
 // UI generator function using template literals
 function getRuleTwelveUIHTML() {
-  if (sacrificedLetters.length === 2) {
-    return `
-      <div>
-        <span>Sacrificed: <strong>${sacrificedLetters[0].toUpperCase()}</strong> and <strong>${sacrificedLetters[1].toUpperCase()}</strong> (Permanently Banned)</span>
-        <button onclick="resetSacrifice()">Change Sacrifice</button>
-      </div>
-    `;
-  } else {
-    return `
-      <div>
-        <p>A sacrifice must be made. Type 2 letters to ban:</p>
-        <input type="text" id="sacrifice-input" maxlength="2" placeholder="e.g. m, o">
-        <button onclick="handleSacrificeSubmission(document.getElementById('sacrifice-input').value)">Lock In Sacrifice</button>
-      </div>
-    `;
-  }
+    if (sacrificedLetters.length === 2) {
+        return `
+            <div>
+                <span>Sacrificed: <strong>${sacrificedLetters[0].toUpperCase()}</strong> and <strong>${sacrificedLetters[1].toUpperCase()}</strong> (Permanently Banned)</span>
+                <button type="button" onclick="resetSacrifice()">Change Sacrifice</button>
+            </div>
+        `;
+    } else {
+        return `
+            <div>
+                <p>A sacrifice must be made. Type 2 letters to ban:</p>
+                <input type="text" id="sacrifice-input" maxlength="2" placeholder="e.g. m, o">
+                <button type="button" onclick="handleSacrificeSubmission(document.getElementById('sacrifice-input').value)">Lock In Sacrifice</button>
+            </div>
+        `;
+    }
 }
 
-// Rule 13 - You do not have enough time this semester; sacrifice one course that you will fail and go for a retake.
+// Rule 13 - Sacrifice one course that you will fail and go for a retake.
 // Responsible: Sofia
 function runRuleThirteen(pwd) {
-  const courses = ["web1", "mse1", "pro1", "sep1"];
-  const lowerPassword = pwd.toLowerCase();
-  
-  //Returns true if the password includes at least one of these courses
-  return courses.some((course) => lowerPassword.includes(course));
+    const courses = ["web1", "mse1", "pro1", "sep1"];
+    const lowerPassword = pwd.toLowerCase();
+    return courses.some((course) => lowerPassword.includes(course));
 }
-
-
 
 // Rule 14 - Your password must include this color in hex. (randomly generated)
 // Responsible: Alisia
-const targetColor = "#" + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0');
+const targetColor = "#" + Math.floor(Math.random() * 16777215).toString(16).padStart(6, "0");
 function runRuleColor(pwd) {
-   // Checks if the password contains the hex code (case-insensitive)
-   return pwd.toLowerCase().includes(targetColor.toLowerCase());
+    return pwd.toLowerCase().includes(targetColor.toLowerCase());
 }
 
 // Rule 15 - Password must contain the capital of Denmark
 // Responsible: Alisia
 function runRuleDenmarkCapital(pwd) {
-   return /(copenhagen|københavn)/i.test(pwd);
+    return /(copenhagen|københavn)/i.test(pwd);
 }
 
 // Rule 16 - Every vowel must be uppercase.
 // Responsible: Alisia
 function runRuleVowelsUppercase(pwd) {
-   // Returns false if any lowercase vowel is found
-   return !/[aeiou]/.test(pwd);
+    return !/[aeiou]/.test(pwd);
 }
 
-// Rule 17 - Every consonant not in a roman number must be lowercase.
+// Rule 17 - Every consonant not in a roman numeral must be lowercase.
 // Responsible: Alisia
 function runRuleConsonantsLowercase(pwd) {
-   // Returns false if any uppercase consonant is found
-   return !/[BFGHJKNPQRSTWXYZ]/.test(pwd);
+    return !/[BFGHJKNPQRSTWXYZ]/.test(pwd);
 }
 
 // Rule 18 - The password must contain a day of the week in Danish
 // Responsible: Alisia
 function runRuleDanishDay(pwd) {
-   return /(mandag|tirsdag|onsdag|torsdag|fredag|lørdag|søndag)/i.test(pwd);
+    return /(mandag|tirsdag|onsdag|torsdag|fredag|lørdag|søndag)/i.test(pwd);
 }
-
 
 // Rule 19 - The password must include one of the colors in the Danish flag
 // Responsible: Alisia
 function runRuleDanishFlagColor(pwd) {
-   return /(red|white|rød|hvid)/i.test(pwd);
+    return /(red|white|rød|hvid)/i.test(pwd);
 }
-
 
 // Rule 20 - Checking if the length is contained in the string
 // Responsible: Jade
@@ -266,28 +264,24 @@ function runRuleTwentyOne(pwd) {
     return true;
 }
 
-
-
-// Rule 22 - Your password should include Allan's favourite exercise, all lowercase letters except vowels (Hint: Session 14)
+// Rule 22 - Allan's favourite exercise, all lowercase letters
 // Responsible: Ionela
-
 function runRuleTwentyTwo(pwd) {
-    var lowerPwd = pwd.toLowerCase();
-    return lowerPwd.indexOf("mydAtE") !== -1;
+    const lowerPwd = pwd.toLowerCase();
+    return lowerPwd.indexOf("mydate") !== -1;
 }
 
 // Rule 23 - Password must contain a palindrome (at least 3 characters long)
 // Responsible: Ionela
-
 function runRuleTwentyThree(pwd) {
-    var lowerPwd = pwd.toLowerCase();
-    var length = lowerPwd.length;
+    const lowerPwd = pwd.toLowerCase();
+    const length = lowerPwd.length;
 
-    for (var i = 0; i < length; i++) {
-        for (var j = i + 3; j <= length; j++) {
-            var sub = lowerPwd.substring(i, j);
-            var reversed = "";
-            for (var k = sub.length - 1; k >= 0; k--) {
+    for (let i = 0; i < length; i++) {
+        for (let j = i + 3; j <= length; j++) {
+            const sub = lowerPwd.substring(i, j);
+            let reversed = "";
+            for (let k = sub.length - 1; k >= 0; k--) {
                 reversed += sub[k];
             }
             if (sub === reversed) {
@@ -298,15 +292,15 @@ function runRuleTwentyThree(pwd) {
     return false;
 }
 
-//Rule 24 - Your password must contain the third password you entered.
-//Responsible: Anna
-function runRuleTwentyFour(pwd){
+// Rule 24 - Your password must contain the third password you entered.
+// Responsible: Anna
+function runRuleTwentyFour(pwd) {
     if (thirdPassword === null) return false;
     return pwd.toLowerCase().includes(thirdPassword.toLowerCase());
 }
-    
 
 // Centralised Array mapping our 24 rules
+// Responsible: Team
 const rulesList = [
     { id: 1, description: "Your password must be at least 5 characters long.", check: runRuleOne },
     { id: 2, description: "Your password must include a number.", check: runRuleTwo },
@@ -331,7 +325,7 @@ const rulesList = [
     { id: 21, description: "Your password length must be a prime number.", check: runRuleTwentyOne },
     { id: 22, description: "Your password should include Allan's favourite exercise, all lowercase letters.", check: runRuleTwentyTwo },
     { id: 23, description: "Your password must contain a palindrome (at least 3 characters).", check: runRuleTwentyThree },
-     { id: 24, description: "Your password must contain the third password you entered.", check: runRuleTwentyFour }
+    { id: 24, description: "Your password must contain the third password you entered.", check: runRuleTwentyFour }
 ];
 
 const passwordInput = document.getElementById("password-input");
@@ -344,24 +338,26 @@ const victoryBanner = document.getElementById("victory-banner");
 const resetGameBtn = document.getElementById("reset-game-btn");
 
 // Read and restore score milestone tracking metrics on start
+// Responsible: Anna
 let personalBest = Number(localStorage.getItem("via_unstyled_score")) || 0;
 statsBanner.innerText = `Personal Best: Unlocked ${personalBest} Rules`;
 totalRulesCount.innerText = rulesList.length;
 
+// Main game loop
+// Responsible: Team
 function processPasswordGameLoop() {
     const password = passwordInput.value;
     charCount.innerText = password.length;
-    rulesContainer.innerHTML = ""; // Clear existing rule lists
+    rulesContainer.innerHTML = "";
 
     let currentScore = 0;
-    let validRulesHTML = [];
-    let invalidRulesHTML = [];
+    const validRulesHTML = [];
+    const invalidRulesHTML = [];
 
     for (let i = 0; i < rulesList.length; i++) {
         const rule = rulesList[i];
         const isPassed = rule.check(password);
 
-        // Build status box element
         const ruleParagraph = document.createElement("p");
         ruleParagraph.classList.add("rule-card");
 
@@ -374,13 +370,13 @@ function processPasswordGameLoop() {
             ruleParagraph.classList.add("invalid");
             ruleParagraph.innerHTML = `[INVALID] Rule ${rule.id}: ${rule.description}`;
             invalidRulesHTML.push(ruleParagraph);
-            break; // Stop pipeline on first failed rule
+            break;
         }
     }
 
     // Update live rules-met counter (goes up as rules pass, goes down if an earlier rule breaks)
     rulesMetCount.innerText = currentScore;
-    
+
     // Append INVALID rules FIRST so they appear at the top
     for (const ruleCard of invalidRulesHTML) {
         rulesContainer.appendChild(ruleCard);
@@ -391,11 +387,11 @@ function processPasswordGameLoop() {
         rulesContainer.appendChild(ruleCard);
     }
 
-    //Remember the password the first time rule 3 is passed (rule 24)
-    if (currentScore >=3 && thirdPassword === null){
+    // Remember the password the first time rule 3 is passed (Rule 24)
+    if (currentScore >= 3 && thirdPassword === null) {
         thirdPassword = password;
     }
-    
+
     // Save peak milestone records
     if (currentScore > personalBest) {
         personalBest = currentScore;
@@ -403,7 +399,7 @@ function processPasswordGameLoop() {
         statsBanner.innerText = `Personal Best: Unlocked ${personalBest} Rules`;
     }
 
-     // Show or hide victory banner when all rules are met
+    // Show or hide victory banner when all rules are met
     if (rulesList.length > 0 && currentScore === rulesList.length) {
         victoryBanner.classList.remove("hidden");
     } else {
@@ -412,7 +408,7 @@ function processPasswordGameLoop() {
 }
 
 // Reset / New Game handler
-// Responsible: Ionela
+// Responsible: Team
 function resetGame() {
     passwordInput.value = "";
     thirdPassword = null;
@@ -422,11 +418,9 @@ function resetGame() {
     processPasswordGameLoop();
     passwordInput.focus();
 }
-// Map event binding handles
+
 passwordInput.addEventListener("input", processPasswordGameLoop);
 resetGameBtn.addEventListener("click", resetGame);
 
-// Execution trigger to initialize the application interface loop
+// Initialize application interface loop
 processPasswordGameLoop();
-
-
