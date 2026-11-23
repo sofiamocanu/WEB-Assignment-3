@@ -124,24 +124,24 @@ function runRuleEleven(pwd) {
 // Responsible: Sofia
 let sacrificedLetters = JSON.parse(localStorage.getItem("sacrificedLetters")) || [];
 
-// Rule 12 is valid only if 2 letters are chosen AND the current password does not contain them
+// Modificat: Regula 12 e VALIDĂ doar dacă ai ales 2 litere ȘI parola actuală NU le conține!
 function runRuleTwelve(pwd) {
     if (sacrificedLetters.length !== 2) return false;
     const lowerPwd = pwd.toLowerCase();
-    // Check if the current password contains any banned letter
+    // Verifică dacă parola curentă conține vreo literă interzisă
     const containsBanned = sacrificedLetters.some((letter) => lowerPwd.includes(letter));
     return !containsBanned;
 }
 
 const pwdInput = document.getElementById("password-input");
 
-// Intercept typing in real time to block banned letters from being entered
+// Interceptează tastarea în timp real pentru a bloca fizic introducerea literelor sacrificate
 pwdInput.addEventListener("beforeinput", (event) => {
     if (!event.data || sacrificedLetters.length !== 2) return;
     const incomingText = event.data.toLowerCase();
     const containsBanned = sacrificedLetters.some((letter) => incomingText.includes(letter));
     if (containsBanned) {
-        event.preventDefault(); // Block input
+        event.preventDefault(); // Blochează tasta
     }
 });
 
@@ -163,8 +163,8 @@ function handleSacrificeSubmission() {
     if (uniqueLetters.length === 2) {
         sacrificedLetters = uniqueLetters;
         localStorage.setItem("sacrificedLetters", JSON.stringify(sacrificedLetters));
-
-        // Automatically remove newly banned letters if they already exist in the password
+        
+        // Dacă parola conținea deja literele proaspăt interzise, le ștergem automat din parolă!
         let currentPwd = pwdInput.value;
         for (const bannedChar of sacrificedLetters) {
             const regex = new RegExp(bannedChar, "gi");
@@ -172,7 +172,7 @@ function handleSacrificeSubmission() {
         }
         pwdInput.value = currentPwd;
 
-        // Re-run the game loop to update UI and rule status
+        // Re-rulăm bucla jocului pentru a actualiza UI-ul și starea regulii
         processPasswordGameLoop();
     } else {
         alert("Please enter 2 different letters (a-z).");
@@ -429,6 +429,7 @@ resetGameBtn.addEventListener("click", resetGame);
 
 // Initialize application interface loop
 processPasswordGameLoop();
+
 
 
 
