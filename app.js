@@ -109,7 +109,7 @@ function runRuleNine(pwd) {
 
 // Rule 10 - This is Line's cat Sofus. Please put him in your password and keep him safe.
 // Responsible: Anna
-function runRuleEleven(pwd) {
+function runRuleTen(pwd) {
     return pwd.includes("🐈");
 }
 
@@ -429,6 +429,7 @@ resetGameBtn.addEventListener("click", resetGame);
 
 // Initialize application interface loop
 processPasswordGameLoop();
+
 
 
 
