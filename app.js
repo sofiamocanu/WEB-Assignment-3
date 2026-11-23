@@ -121,21 +121,28 @@ function runRuleEleven(pwd) {
 
 // Rule 12 - A sacrifice must be made. Pick two letters that you will no longer be able to use.
 // Responsible: Sofia
+// Rule 12 - A sacrifice must be made. Pick two letters that you will no longer be able to use.
+// Responsible: Sofia
 let sacrificedLetters = JSON.parse(localStorage.getItem("sacrificedLetters")) || [];
 
-function runRuleTwelve() {
-    return sacrificedLetters.length === 2;
+// Rule 12 is valid only if 2 letters are chosen AND the current password does not contain them
+function runRuleTwelve(pwd) {
+    if (sacrificedLetters.length !== 2) return false;
+    const lowerPwd = pwd.toLowerCase();
+    // Check if the current password contains any banned letter
+    const containsBanned = sacrificedLetters.some((letter) => lowerPwd.includes(letter));
+    return !containsBanned;
 }
 
 const pwdInput = document.getElementById("password-input");
 
-// Intercept typing in the MAIN password box to block banned letters
+// Intercept typing in real time to block banned letters from being entered
 pwdInput.addEventListener("beforeinput", (event) => {
     if (!event.data || sacrificedLetters.length !== 2) return;
     const incomingText = event.data.toLowerCase();
     const containsBanned = sacrificedLetters.some((letter) => incomingText.includes(letter));
     if (containsBanned) {
-        event.preventDefault();
+        event.preventDefault(); // Block input
     }
 });
 
@@ -157,6 +164,16 @@ function handleSacrificeSubmission() {
     if (uniqueLetters.length === 2) {
         sacrificedLetters = uniqueLetters;
         localStorage.setItem("sacrificedLetters", JSON.stringify(sacrificedLetters));
+
+        // Automatically remove newly banned letters if they already exist in the password
+        let currentPwd = pwdInput.value;
+        for (const bannedChar of sacrificedLetters) {
+            const regex = new RegExp(bannedChar, "gi");
+            currentPwd = currentPwd.replace(regex, "");
+        }
+        pwdInput.value = currentPwd;
+
+        // Re-run the game loop to update UI and rule status
         processPasswordGameLoop();
     } else {
         alert("Please enter 2 different letters (a-z).");
@@ -413,4 +430,5 @@ resetGameBtn.addEventListener("click", resetGame);
 
 // Initialize application interface loop
 processPasswordGameLoop();
+
 
