@@ -131,29 +131,22 @@ const pwdInput = document.getElementById("password-input");
 
 // Intercept typing in the MAIN password box to block banned letters
 pwdInput.addEventListener("beforeinput", (event) => {
-    if (!event.data) return;
+    if (!event.data || sacrificedLetters.length !== 2) return;
     const incomingText = event.data.toLowerCase();
-
-    if (sacrificedLetters.length === 2) {
-        const containsBanned = sacrificedLetters.some((letter) => incomingText.includes(letter));
-        if (containsBanned) {
-            event.preventDefault();
-        }
+    const containsBanned = sacrificedLetters.some((letter) => incomingText.includes(letter));
+    if (containsBanned) {
+        event.preventDefault();
     }
 });
 
-function refreshRuleTwelveDescription() {
-    const ruleTwelve = rulesList.find((rule) => rule.id === 12);
-    if (ruleTwelve) {
-        ruleTwelve.description = getRuleTwelveUIHTML();
-    }
-}
-
 // Function to handle setting or changing the sacrificed letters from the UI field
-function handleSacrificeSubmission(inputVal) {
-    const cleanLetters = inputVal.toLowerCase().replace(/[^a-z]/g, "");
+function handleSacrificeSubmission() {
+    const sacrificeInputEl = document.getElementById("sacrifice-input");
+    if (!sacrificeInputEl) return;
 
+    const cleanLetters = sacrificeInputEl.value.toLowerCase().replace(/[^a-z]/g, "");
     const uniqueLetters = [];
+
     for (const char of cleanLetters) {
         if (!uniqueLetters.includes(char)) {
             uniqueLetters.push(char);
@@ -164,21 +157,17 @@ function handleSacrificeSubmission(inputVal) {
     if (uniqueLetters.length === 2) {
         sacrificedLetters = uniqueLetters;
         localStorage.setItem("sacrificedLetters", JSON.stringify(sacrificedLetters));
-        refreshRuleTwelveDescription();
         processPasswordGameLoop();
-        alert(`Sacrifice locked: ${sacrificedLetters[0].toUpperCase()} and ${sacrificedLetters[1].toUpperCase()} are now banned from your password!`);
     } else {
-        alert("Please enter at least 2 unique alphabetical letters.");
+        alert("Please enter 2 different letters (a-z).");
     }
 }
 
 // Function to clear/change the sacrifice
 function resetSacrifice() {
-    localStorage.removeItem("sacrificedLetters");
     sacrificedLetters = [];
-    refreshRuleTwelveDescription();
+    localStorage.removeItem("sacrificedLetters");
     processPasswordGameLoop();
-    alert("Sacrifice cleared! You can now choose new letters.");
 }
 
 // UI generator function using template literals
@@ -190,15 +179,15 @@ function getRuleTwelveUIHTML() {
                 <button type="button" onclick="resetSacrifice()">Change Sacrifice</button>
             </div>
         `;
-    } else {
-        return `
-            <div>
-                <p>A sacrifice must be made. Type 2 letters to ban:</p>
-                <input type="text" id="sacrifice-input" maxlength="2" placeholder="e.g. m, o">
-                <button type="button" onclick="handleSacrificeSubmission(document.getElementById('sacrifice-input').value)">Lock In Sacrifice</button>
-            </div>
-        `;
     }
+
+    return `
+        <div>
+            <p>A sacrifice must be made. Type 2 different letters to ban:</p>
+            <input type="text" id="sacrifice-input" maxlength="5" placeholder="e.g. mo">
+            <button type="button" onclick="handleSacrificeSubmission()">Lock In Sacrifice</button>
+        </div>
+    `;
 }
 
 // Rule 13 - Sacrifice one course that you will fail and go for a retake.
@@ -313,7 +302,7 @@ const rulesList = [
     { id: 9, description: "Your password must include the HTML line of code needed for making or closing a new paragraph.", check: runRuleNine },
     { id: 10, description: "🐈 This is Line’s cat Sofus. Please put him in your password and keep him safe.", check: runRuleTen },
     { id: 11, description: "Sofus is hungry! Please don’t forget to feed him one 🐁and one🐟.", check: runRuleEleven },
-    { id: 12, description: getRuleTwelveUIHTML(), check: runRuleTwelve },
+    { id: 12, description: "A sacrifice must be made. Pick two letters that you will no longer be able to use.", check: runRuleTwelve },
     { id: 13, description: "You do not have enough time this semester; sacrifice one course that you will fail and go for a retake.", check: runRuleThirteen },
     { id: 14, description: `Your password must include this color in hex: ${targetColor}`, check: runRuleColor },
     { id: 15, description: "Password must contain the capital of Denmark.", check: runRuleDenmarkCapital },
@@ -344,7 +333,6 @@ statsBanner.innerText = `Personal Best: Unlocked ${personalBest} Rules`;
 totalRulesCount.innerText = rulesList.length;
 
 // Main game loop
-// Responsible: Team
 function processPasswordGameLoop() {
     const password = passwordInput.value;
     charCount.innerText = password.length;
@@ -356,6 +344,7 @@ function processPasswordGameLoop() {
 
     for (let i = 0; i < rulesList.length; i++) {
         const rule = rulesList[i];
+        const ruleDescription = rule.id === 12 ? getRuleTwelveUIHTML() : rule.description;
         const isPassed = rule.check(password);
 
         const ruleParagraph = document.createElement("p");
@@ -363,12 +352,12 @@ function processPasswordGameLoop() {
 
         if (isPassed) {
             ruleParagraph.classList.add("valid");
-            ruleParagraph.innerHTML = `[VALID] Rule ${rule.id}: ${rule.description}`;
+            ruleParagraph.innerHTML = `[VALID] Rule ${rule.id}: ${ruleDescription}`;
             currentScore++;
             validRulesHTML.push(ruleParagraph);
         } else {
             ruleParagraph.classList.add("invalid");
-            ruleParagraph.innerHTML = `[INVALID] Rule ${rule.id}: ${rule.description}`;
+            ruleParagraph.innerHTML = `[INVALID] Rule ${rule.id}: ${ruleDescription}`;
             invalidRulesHTML.push(ruleParagraph);
             break;
         }
@@ -398,7 +387,8 @@ function processPasswordGameLoop() {
         localStorage.setItem("via_unstyled_score", personalBest);
         statsBanner.innerText = `Personal Best: Unlocked ${personalBest} Rules`;
     }
-
+    
+    // Responsible: Ionela
     // Show or hide victory banner when all rules are met
     if (rulesList.length > 0 && currentScore === rulesList.length) {
         victoryBanner.classList.remove("hidden");
@@ -408,13 +398,12 @@ function processPasswordGameLoop() {
 }
 
 // Reset / New Game handler
-// Responsible: Team
+// Responsible: Ionela
 function resetGame() {
     passwordInput.value = "";
     thirdPassword = null;
     sacrificedLetters = [];
     localStorage.removeItem("sacrificedLetters");
-    refreshRuleTwelveDescription();
     processPasswordGameLoop();
     passwordInput.focus();
 }
@@ -424,5 +413,3 @@ resetGameBtn.addEventListener("click", resetGame);
 
 // Initialize application interface loop
 processPasswordGameLoop();
-
-
