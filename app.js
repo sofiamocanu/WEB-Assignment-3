@@ -338,10 +338,15 @@ const passwordInput = document.getElementById("password-input");
 const charCount = document.getElementById("char-count");
 const rulesContainer = document.getElementById("rules-container");
 const statsBanner = document.getElementById("stats-banner");
+const rulesMetCount = document.getElementById("rules-met-count");
+const totalRulesCount = document.getElementById("total-rules-count");
+const victoryBanner = document.getElementById("victory-banner");
+const resetGameBtn = document.getElementById("reset-game-btn");
 
 // Read and restore score milestone tracking metrics on start
-let personalBest = localStorage.getItem("via_unstyled_score") || 0;
+let personalBest = Number(localStorage.getItem("via_unstyled_score")) || 0;
 statsBanner.innerText = `Personal Best: Unlocked ${personalBest} Rules`;
+totalRulesCount.innerText = rulesList.length;
 
 function processPasswordGameLoop() {
     const password = passwordInput.value;
@@ -372,6 +377,9 @@ function processPasswordGameLoop() {
             break; // Stop pipeline on first failed rule
         }
     }
+
+    // Update live rules-met counter (goes up as rules pass, goes down if an earlier rule breaks)
+    rulesMetCount.innerText = currentScore;
     
     // Append INVALID rules FIRST so they appear at the top
     for (const ruleCard of invalidRulesHTML) {
@@ -383,7 +391,7 @@ function processPasswordGameLoop() {
         rulesContainer.appendChild(ruleCard);
     }
 
-    //Remember the password the first time rule 3 is passed (reule 24)
+    //Remember the password the first time rule 3 is passed (rule 24)
     if (currentScore >=3 && thirdPassword === null){
         thirdPassword = password;
     }
@@ -394,10 +402,29 @@ function processPasswordGameLoop() {
         localStorage.setItem("via_unstyled_score", personalBest);
         statsBanner.innerText = `Personal Best: Unlocked ${personalBest} Rules`;
     }
+
+     // Show or hide victory banner when all rules are met
+    if (rulesList.length > 0 && currentScore === rulesList.length) {
+        victoryBanner.classList.remove("hidden");
+    } else {
+        victoryBanner.classList.add("hidden");
+    }
 }
 
+// Reset / New Game handler
+// Responsible: Ionela
+function resetGame() {
+    passwordInput.value = "";
+    thirdPassword = null;
+    sacrificedLetters = [];
+    localStorage.removeItem("sacrificedLetters");
+    refreshRuleTwelveDescription();
+    processPasswordGameLoop();
+    passwordInput.focus();
+}
 // Map event binding handles
 passwordInput.addEventListener("input", processPasswordGameLoop);
+resetGameBtn.addEventListener("click", resetGame);
 
 // Execution trigger to initialize the application interface loop
 processPasswordGameLoop();
