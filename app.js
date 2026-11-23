@@ -124,7 +124,7 @@ function runRuleEleven(pwd) {
 // Responsible: Sofia
 let sacrificedLetters = JSON.parse(localStorage.getItem("sacrificedLetters")) || [];
 
-// Modificat: Regula 12 e VALIDĂ doar dacă ai ales 2 litere ȘI parola actuală NU le conține!
+// Rule 12 is VALID only if you picked 2 letters AND the current password does NOT contain them!
 function runRuleTwelve(pwd) {
     if (sacrificedLetters.length !== 2) return false;
     const lowerPwd = pwd.toLowerCase();
@@ -135,7 +135,7 @@ function runRuleTwelve(pwd) {
 
 const pwdInput = document.getElementById("password-input");
 
-// Interceptează tastarea în timp real pentru a bloca fizic introducerea literelor sacrificate
+// Intercept typing in real time to block sacrificed letters from being entered
 pwdInput.addEventListener("beforeinput", (event) => {
     if (!event.data || sacrificedLetters.length !== 2) return;
     const incomingText = event.data.toLowerCase();
@@ -429,6 +429,7 @@ resetGameBtn.addEventListener("click", resetGame);
 
 // Initialize application interface loop
 processPasswordGameLoop();
+
 
 
 
