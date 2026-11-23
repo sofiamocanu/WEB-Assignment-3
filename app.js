@@ -124,7 +124,7 @@ function runRuleEleven(pwd) {
 let sacrificedLetters = JSON.parse(localStorage.getItem("sacrificedLetters")) || [];
 
 function runRuleTwelve() {
-    return sacrificedLetters.length === 2;
+    return sacrificedLetters.length === 4;
 }
 
 const pwdInput = document.getElementById("password-input");
@@ -424,3 +424,4 @@ resetGameBtn.addEventListener("click", resetGame);
 
 // Initialize application interface loop
 processPasswordGameLoop();
+
