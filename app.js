@@ -306,7 +306,7 @@ function runRuleTwentyFour(pwd){
 }
     
 
-// Centralised Array mapping our 25 rules
+// Centralised Array mapping our 24 rules
 const rulesList = [
     { id: 1, description: "Your password must be at least 5 characters long.", check: runRuleOne },
     { id: 2, description: "Your password must include a number.", check: runRuleTwo },
@@ -401,4 +401,5 @@ passwordInput.addEventListener("input", processPasswordGameLoop);
 
 // Execution trigger to initialize the application interface loop
 processPasswordGameLoop();
+
 
