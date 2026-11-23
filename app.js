@@ -54,6 +54,7 @@ function runRuleSeven(pwd){
 }
 
 // Helper function for rule 8 to convert a Roman Numeral character to its numeric value
+// Responsible: Ionela
 function getRomanValueForRuleEight(char) {
     if (char === 'I') return 1;
     if (char === 'V') return 5;
@@ -400,3 +401,4 @@ passwordInput.addEventListener("input", processPasswordGameLoop);
 
 // Execution trigger to initialize the application interface loop
 processPasswordGameLoop();
+
