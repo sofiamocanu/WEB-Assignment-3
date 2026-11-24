@@ -230,7 +230,7 @@ function runRuleDenmarkCapital(pwd) {
 // Rule 16 - Every vowel must be uppercase.
 // Responsible: Alisia
 function runRuleVowelsUppercase(pwd) {
-    return !/[aeiou]/.test(pwd);
+    return !/[aeiouæøå]/.test(pwd);
 }
 
 // Rule 17 - Every consonant not in a roman numeral must be lowercase.
